@@ -124,6 +124,7 @@ directory on your desktop.
 
 Open the Terminal and go to the directory where the data are stored:
 \begin{lstlisting}
+cd
 ls
 cd qc
 pwd
@@ -148,8 +149,8 @@ results in the form of a zipped and unzipped directory for each input file.
 \begin{steps}
 Execute the following command on the two files:
 \begin{lstlisting}
-fastqc -f qcdemo_R1.fastq.gz
-fastqc -f qcdemo_R2.fastq.gz
+fastqc -f fastq qcdemo_R1.fastq.gz
+fastqc -f fastq qcdemo_R2.fastq.gz
 \end{lstlisting}
 
 View the FastQC report file of the bad data using a web browser such as
@@ -291,8 +292,8 @@ We will be using Skewer to perform the quality trimming.
 
 Run the following command to quality trim a set of paired end data.
 \begin{lstlisting}
-cd ~/qc
-skewer -t 20 -l 50  -q 30 -Q 25 -m pe qcdemo_R1.fastq.gz qcdemo_R2.fastq.gz
+cd /home/trainee/qc
+skewer -t 4 -l 50  -q 30 -Q 25 -m pe qcdemo_R1.fastq.gz qcdemo_R2.fastq.gz
 \end{lstlisting}
 \end{steps}
 
@@ -308,15 +309,24 @@ skewer -t 20 -l 50  -q 30 -Q 25 -m pe qcdemo_R1.fastq.gz qcdemo_R2.fastq.gz
 \end{note}
 
 \begin{steps}
-Run FastQC on the quality trimmed file and visualise the quality scores.
+Run FastQC on the quality trimmed file and visualise the quality scores. 
 
+Look at the last files generated, are the file names same as the input ?
+\begin{lstlisting}
+ls -ltr
+\end{lstlisting}
+
+Run Fastqc on the quality trimmed files:
 \begin{lstlisting}
 fastqc -f fastq qcdemo_R1.fastq-trimmed-pair1.fastq
 fastqc -f fastq qcdemo_R1.fastq-trimmed-pair2.fastq
+\end{lstlisting}
+
+Visualise the fastqc results:
+\begin{lstlisting}
 firefox qcdemo_R1.fastq-trimmed-pair1_fastqc.html &
 firefox qcdemo_R1.fastq-trimmed-pair2_fastqc.html&
 \end{lstlisting}
-
 Let's look at the quality from the second reads. The output should look like:
 
 \begin{table}[H]
@@ -398,7 +408,7 @@ Here we are demonstrating \texttt{Skewer} to trim a given adapter
 sequence.
 
 \begin{lstlisting}
-cd ~/qc
+cd /home/trainee/qc
 fastqc -f fastq  adaptorQC.fastq.gz
 skewer -x TGGAATTCTCGGGTGCCAAGGT -t 20 -l 10 -L 35 -q 30 adaptorQC.fastq.gz
 
@@ -419,16 +429,10 @@ skewer -x TGGAATTCTCGGGTGCCAAGGT -t 20 -l 10 -L 35 -q 30 adaptorQC.fastq.gz
 Run FastQC on the adapter trimmed file and visualise the quality scores. Fastqc now shows adaptor free results.
 
 \begin{lstlisting}
-fastqc -f fastq adaptorQC.fastq-trimmed.fastq
+fastqc adaptorQC.fastq-trimmed.fastq
 firefox adaptorQC.fastq-trimmed_fastqc.html &
 \end{lstlisting}
 \end{steps}
-
-\begin{note}
-An alternative tool, not installed on this system, for adapter clipping is
-\texttt{fastq-mcf}. A list of adapters is provided in a text file. For more
-information, see FastqMcf at \url{http://code.google.com/p/ea-utils/wiki/FastqMcf}.
-\end{note}
 
 \subsection{Fixed Length Trimming}
 \textbf{We will not cover Fixed Length Trimming but
@@ -502,55 +506,4 @@ the 5' end of the reads?
 \texttt{-f 11}
 \end{answer}
 \end{questions}
-
-\subsection{Removing Duplicates}
-Duplicate reads are the ones having the same start and end coordinates. This
-may be the result of technical duplication (too many PCR cycles), or
-over-sequencing (very high fold coverage). It is very important to put the
-duplication level in context of your experiment. For example, duplication level
-in targeted or re-sequencing projects may mean something different in RNA-seq
-experiments. In RNA-seq experiments oversequencing is usually necessary when
-detecting low abundance transcripts.
-
-\begin{information}
-The duplication level computed by FastQC is based on sequence identity at the
-end of reads. Another tool, Picard, determines duplicates based on identical
-start and end positions in SAM/BAM alignment files.
-
-\textbf{We will not cover Picard but
-provide the following for your information.}
-
-Picard is a suite of tools for performing many common tasks with SAM/BAM format
-files. For more information see the Picard website and information about the
-various command-line tools available:
-
-\url{http://picard.sourceforge.net/command-line-overview.shtml}
-
-A good list of tools for filtering PCR duplication can also be found at 
-\url{http://omictools.com/duplicate-reads-removal-c495-p1.html}
-
-\end{information}
-
-\begin{information}
-Picard is installed on this system in \texttt{/usr/share/java}
-
-One of the Picard tools (MarkDuplicates) can be used to analyse and remove
-duplicates from the raw sequence data. The input for Picard is a sorted
-alignment file in BAM format. Short read aligners such as, bowtie, BWA and tophat
-can be used to align FASTQ files against a reference genome to generate
-SAM/BAM alignment format.
-\end{information}
-
-\begin{steps}
-Interested users can use the following general command to run the
-MarkDuplicates tool at their leisure. You only need to provide a BAM file for the
-INPUT argument (not provided):
-
-\begin{lstlisting}[style=command_syntax]
-cd ~/qc
-java -jar /usr/share/java/MarkDuplicates.jar INPUT=<alignment_file.bam> VALIDATION_STRINGENCY=LENIENT OUTPUT=alignment_file.dup METRICS_FILE=alignment_file.matric ASSUME_SORTED=true REMOVE_DUPLICATES=true
-
-\end{lstlisting}
-\end{steps}
-
-\end{advanced}
+\end {advanced}
