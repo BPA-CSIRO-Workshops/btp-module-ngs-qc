@@ -293,7 +293,7 @@ We will be using Skewer to perform the quality trimming.
 Run the following command to quality trim a set of paired end data.
 \begin{lstlisting}
 cd /home/trainee/qc
-skewer -t 4 -l 50  -q 30 -Q 25 -m pe qcdemo_R1.fastq.gz qcdemo_R2.fastq.gz
+skewer -t 4 -l 50  -q 30 -Q 25 -m pe -o qcdemo qcdemo_R1.fastq.gz qcdemo_R2.fastq.gz
 \end{lstlisting}
 \end{steps}
 
@@ -360,7 +360,7 @@ Let's look at the quality from the second reads. The output should look like:
 
 Did the number of total reads in R1 and R2 change after trimming?
 \begin{answer}
-Quality trimming discarded $>$1000 reads. However, We retain a lot of maximal
+Quality trimming discarded $>$25000 reads. However, We retain a lot of maximal
 length reads which have good quality all the way to the ends.
 \end{answer}
 
@@ -411,6 +411,7 @@ sequence.
 \begin{lstlisting}
 cd /home/trainee/qc
 fastqc -f fastq  adaptorQC.fastq.gz
+firefox adaptorQC_fastqc.html 
 skewer -x TGGAATTCTCGGGTGCCAAGGT -t 20 -l 10 -L 35 -q 30 adaptorQC.fastq.gz
 \end{lstlisting}
 \end{steps}
