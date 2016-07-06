@@ -446,7 +446,7 @@ you can use with this tool. Type \texttt{fastx\_trimmer -h} at anytime to displa
 We will now do fixed-length trimming of the \texttt{bad\_example.fastq} file
 using the following command. You should still be in the qc directory, if not cd back in.
 \begin{lstlisting}
-cd ~/qc
+cd /home/trainee/qc
 fastqc -f fastq bad_example.fastq 
 fastx_trimmer -h
 fastx_trimmer -Q 33 -f 1 -l 80 -i bad_example.fastq -o bad_example_trimmed01.fastq
