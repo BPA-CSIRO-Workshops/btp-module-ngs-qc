@@ -1,4 +1,4 @@
-# btp-module-ngs-qc
+# NGS Quality Control
 Bioinformatics Training Platform (BTP) Module: NGS Quality Control
 
   * Topic
